@@ -1,7 +1,11 @@
-#from app.api.features.schemas.schemas import RequestSchema, SpellingCheckerRequestArgs
+from app.api.features.json_to_sql import convert_json_to_sql_schema
+from app.api.features.schemas.services_schemas import JsonToSQLSchema
 from fastapi import APIRouter, Depends
 from app.api.logger import setup_logger
 from app.api.auth.auth import key_check
+
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 logger = setup_logger(__name__)
 router = APIRouter()
@@ -10,16 +14,13 @@ router = APIRouter()
 def read_root():
     return {"Hello": "World"}
 
-# @router.post("/check-spelling")
-# async def submit_tool( data: RequestSchema, _ = Depends(key_check)):
-#     logger.info(f"Loading request args...")
-#     args = SpellingCheckerRequestArgs(spelling_checker_schema=data)
-#     logger.info(f"Args. loaded successfully")
+@router.post("/json-to-sql")
+async def submit_tool( data: JsonToSQLSchema, _ = Depends(key_check)):
+    logger.info(f"Args. loaded successfully: {data}")
+    logger.info("Generating the SQL Schema...")
 
-#     chain = compile_chain()
+    result = convert_json_to_sql_schema(data)
 
-#     logger.info("Generating the spelling checking analysis")
-#     results = chain.invoke(args.validate_and_return())
-#     logger.info("The spelling checking analysis has been successfully generated")
+    logger.info("The SQL schema has been successfully generated")
 
-#     return results
+    return result

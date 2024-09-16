@@ -1,6 +1,7 @@
 from app.api.features.json_to_sql import convert_json_to_sql_schema
 from app.api.features.math_formulas_in_latex import convert_formula_to_latex
-from app.api.features.schemas.services_schemas import FormulaToLatexSchema, JsonToSQLSchema, XmlToSQLSchema
+from app.api.features.schemas.services_schemas import FormulaToLatexSchema, JsonToSQLSchema, TranslationSchema, XmlToSQLSchema
+from app.api.features.translator import translate_text
 from app.api.features.xml_to_sql import convert_xml_to_sql_schema
 from fastapi import APIRouter, Depends
 from app.api.logger import setup_logger
@@ -46,5 +47,16 @@ async def submit_tool( data: FormulaToLatexSchema, _ = Depends(key_check)):
     result = convert_formula_to_latex(data)
 
     logger.info("The Math Formula in LaTeX has been successfully generated")
+
+    return result
+
+@router.post("/translator")
+async def submit_tool( data: TranslationSchema, _ = Depends(key_check)):
+    logger.info(f"Args. loaded successfully: {data}")
+    logger.info(f"Generating the translaton from {data.source_language} to {data.target_language}...")
+
+    result = translate_text(data)
+
+    logger.info("The translation has been successfully generated")
 
     return result

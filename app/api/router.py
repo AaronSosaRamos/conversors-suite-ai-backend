@@ -1,6 +1,13 @@
 from app.api.features.json_to_sql import convert_json_to_sql_schema
 from app.api.features.math_formulas_in_latex import convert_formula_to_latex
-from app.api.features.schemas.services_schemas import FormulaToLatexSchema, JsonToSQLSchema, TranslationSchema, XmlToSQLSchema
+from app.api.features.schemas.services_schemas import (
+    FormulaToLatexSchema, 
+    InfoToTableSchema, 
+    JsonToSQLSchema, 
+    TranslationSchema, 
+    XmlToSQLSchema
+)
+from app.api.features.text_to_conceptual_table import convert_info_to_conceptual_table
 from app.api.features.translator import translate_text
 from app.api.features.xml_to_sql import convert_xml_to_sql_schema
 from fastapi import APIRouter, Depends
@@ -58,5 +65,16 @@ async def submit_tool( data: TranslationSchema, _ = Depends(key_check)):
     result = translate_text(data)
 
     logger.info("The translation has been successfully generated")
+
+    return result
+
+@router.post("/text-to-conceptual-table")
+async def submit_tool( data: InfoToTableSchema, _ = Depends(key_check)):
+    logger.info(f"Args. loaded successfully: {data}")
+    logger.info(f"Generating the conceptual table...")
+
+    result = convert_info_to_conceptual_table(data)
+
+    logger.info("The conceptual table has been successfully generated")
 
     return result

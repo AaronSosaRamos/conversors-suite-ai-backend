@@ -15,3 +15,7 @@ class TranslationSchema(BaseModel):
     text_input: str = Field(..., description="The input string containing the text to be translated.")
     source_language: str = Field(..., description="The source language of the text (e.g., English, Spanish).")
     target_language: str = Field(..., description="The target language for the translation (e.g., French, German).")
+
+class InfoToTableSchema(BaseModel):
+    text_input: str = Field(..., description="The input string containing the information to be converted into table format.")
+    context: str = Field(..., description="Additional context about the type of table or fields to extract, if necessary.")

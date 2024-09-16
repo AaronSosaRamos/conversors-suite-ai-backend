@@ -6,3 +6,4 @@ langchain-community
 uvicorn[standard]
 python-dotenv
 tqdm
+langchain-google-genai

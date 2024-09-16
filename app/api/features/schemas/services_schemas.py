@@ -19,3 +19,6 @@ class TranslationSchema(BaseModel):
 class InfoToTableSchema(BaseModel):
     text_input: str = Field(..., description="The input string containing the information to be converted into table format.")
     context: str = Field(..., description="Additional context about the type of table or fields to extract, if necessary.")
+
+class ImageTranscriptionSchema(BaseModel):
+    img_url: str = Field(..., description="The image url for the transcription process.")

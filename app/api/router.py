@@ -1,7 +1,9 @@
+from app.api.features.image_transcription import image_transcription
 from app.api.features.json_to_sql import convert_json_to_sql_schema
 from app.api.features.math_formulas_in_latex import convert_formula_to_latex
 from app.api.features.schemas.services_schemas import (
-    FormulaToLatexSchema, 
+    FormulaToLatexSchema,
+    ImageTranscriptionSchema, 
     InfoToTableSchema, 
     JsonToSQLSchema, 
     TranslationSchema, 
@@ -76,5 +78,16 @@ async def submit_tool( data: InfoToTableSchema, _ = Depends(key_check)):
     result = convert_info_to_conceptual_table(data)
 
     logger.info("The conceptual table has been successfully generated")
+
+    return result
+
+@router.post("/image-transcription")
+async def submit_tool( data: ImageTranscriptionSchema, _ = Depends(key_check)):
+    logger.info(f"Args. loaded successfully: {data}")
+    logger.info(f"Generating the transcription from the image: {data.img_url}...")
+
+    result = image_transcription(data)
+
+    logger.info("The transcription has been successfully generated")
 
     return result
